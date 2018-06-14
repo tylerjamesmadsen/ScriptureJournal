@@ -1,6 +1,10 @@
 ﻿@{ 
     Layout = "~/_Layout.cshtml";
     Page.Title = "List Scriptures";
+
+    var db = Database.Open("ScriptureJournalEntries");
+    var selectCommand = "SELECT * FROM JournalEntries";
+    var searchTerm = "";
 }
 
 <h2>Scripture Journal</h2>
