@@ -3,7 +3,10 @@
     Page.Title = "Add Journal Entry";
 
     Validation.RequireField("canon", "You must select a canon");
-    //Validation.RequireField("book", "You must enter a book");
+    if (Request.Form["canon"] != "Doctrine and Covenants" || Request.Form["canon"] != "")
+    {
+        Validation.RequireField("book", "You must enter a book");
+    }
     Validation.RequireField("chapter", "You must enter a chapter");
     Validation.RequireField("verse", "You must enter a verse");
     Validation.RequireField("entry", "You must enter a journal entry");
@@ -37,6 +40,7 @@
         <p>
             <label for="canon">Canon:</label>
             <select name="canon">
+                <option value="" selected disabled hidden>@canon</option>
                 <option value="Old Testament">Old Testament</option>
                 <option value="New Testament">New Testament</option>
                 <option value="Book of Mormon">Book of Mormon</option>
