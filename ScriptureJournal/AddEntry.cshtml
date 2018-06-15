@@ -1,6 +1,88 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Add Journal Entry";
+
+    Validation.RequireField("canon", "You must select a canon");
+    //Validation.RequireField("book", "You must enter a book");
+    Validation.RequireField("chapter", "You must enter a chapter");
+    Validation.RequireField("verse", "You must enter a verse");
+    Validation.RequireField("entry", "You must enter a journal entry");
+
+    var canon = "";
+    var book = "";
+    int chapter;
+    int verse;
+    var entry = "";
+
+    if (IsPost && Validation.IsValid())
+    {
+        canon = Request.Form["canon"];
+        book = Request.Form["book"];
+        var strChapter = Request.Form["chapter"];
+        chapter = Convert.ToUInt16(strChapter);
+        var strVerse = Request.Form["verse"];
+        verse = Convert.ToUInt16(strVerse);
+        entry = Request.Form["entry"];
+        var db = Database.Open("ScriptureJournalEntries");
+        var insertCommand = "INSERT INTO JournalEntries (Canon, Book, Chapter, Verse, Entry, DateAdded)" +
+                            "VALUES (@0, @1, @2, @3, @4, @5)";
+        db.Execute(insertCommand, canon, book, chapter, verse, entry, DateTime.Now);
+        Response.Redirect("~/JournalEntries");
+    }
 }
 
 <h2>Add a Journal Entry</h2>
+@Html.ValidationSummary()
+<form method="post">
+    <fieldset>
+        <legend>Scripture Journal Entry</legend>
+        <p>
+            <label for="canon">Canon:</label>
+            <select name="canon">
+                <option value="Old Testament">Old Testament</option>
+                <option value="New Testament">New Testament</option>
+                <option value="Book of Mormon">Book of Mormon</option>
+                <option value="Doctrine and Covenants">Doctrine and Covenants</option>
+                <option value="Pearl of Great Price">Pearl of Great Price</option>
+            </select>
+            @*<input type="text" name="canon" value="@Request.Form["canon"]" />*@
+            @Html.ValidationMessage("canon")
+        </p>
+
+        <p>
+            <label for="book">Book:</label >
+                <input type="text" name="book" value="@Request.Form["book"]" />
+                @Html.ValidationMessage("book")
+        </p>
+
+        <p>
+            @*<label for="chapter">
+                @if (!Request.Form["canon"].ToString().Equals("Doctrine and Covenants"))
+                {
+                    @:Section
+                }
+                else
+                {
+                    @:Chapter
+                }
+                :</ label >*@
+            <label for="chapter">Chapter:</label>
+            <input type="text" name="chapter" value="@Request.Form["chapter"]" />
+            @Html.ValidationMessage("chapter")
+        </p>
+
+        <p>
+            <label for="verse">Verse:</label>
+            <input type="text" name="verse" value="@Request.Form["verse"]" />
+            @Html.ValidationMessage("verse")
+        </p>
+
+        <p>
+            <label for="entry">Journal entry:</label>
+            <input type="text" name="entry" value="@Request.Form["entry"]" />
+            @Html.ValidationMessage("entry")
+        </p>
+
+        <p><input type="submit" name="buttonSubmit" value="Add Journal Entry" /></p>
+    </fieldset>
+</form>

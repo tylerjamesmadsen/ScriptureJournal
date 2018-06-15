@@ -32,6 +32,14 @@
 <form method="get">
     <div>
         <label for="searchCanon">Canon:</label>
+        @*<select name="canon">
+                <option value="All">All</option>
+                <option value="Old Testament">Old Testament</option>
+                <option value="New Testament">New Testament</option>
+                <option value="Book of Mormon">Book of Mormon</option>
+                <option value="Doctrine and Covenants">Doctrine and Covenants</option>
+                <option value="Pearl of Great Price">Pearl of Great Price</option>
+            </select>*@
         <input type="text" name="searchCanon" value="@Request.QueryString["searchCanon"]" />
         <input type="submit" value="Search Canon" /><br />
         (Leave blank to list all canons.)<br />
@@ -57,15 +65,15 @@
         alternatingRowStyle: "alt",
         columns: grid.Columns(
             grid.Column(format: @<a href="~/EditEntry?id=@item.ID">Edit</a>),
-                        grid.Column("Canon"),
-                        grid.Column("Book"),
-                        grid.Column("Chapter"),
-                        grid.Column("Verse"),
-                        grid.Column("Entry"),
-                        grid.Column("DateAdded"),
-                        grid.Column(format: @<a href="~/DeleteEntry?id=@item.ID">Delete</a>)
-                                                                                                 )
-                                                                                                 )
+            grid.Column("Canon"),
+            grid.Column("Book"),
+            grid.Column("Chapter"),
+            grid.Column("Verse"),
+            grid.Column("Entry"),
+            grid.Column("DateAdded"),
+            grid.Column(format: @<a href="~/DeleteEntry?id=@item.ID">Delete</a>)
+            )
+    )
 </div>
 
 <p>
