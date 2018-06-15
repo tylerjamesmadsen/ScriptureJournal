@@ -2,6 +2,123 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "Edit Journal Entry";
 
+    var journalId = "";
+    var canon = "";
+    var book = "";
+    var chapter = "";
+    var verse = "";
+    var entry = "";
+
+    if (!IsPost)
+    {
+        if (!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
+        {
+            journalId = Request.QueryString["ID"];
+            var db = Database.Open("ScriptureJournalEntries");
+            var dbCommand = "SELECT * FROM JournalEntries WHERE ID = @0";
+            var row = db.QuerySingle(dbCommand, journalId);
+
+            if (row != null)
+            {
+                canon = row.Canon;
+                book = row.Book;
+                chapter = row.Chapter;
+                verse = row.Verse;
+                entry = row.Entry;
+            }
+            else
+            {
+                Validation.AddFormError("No entry was found for that ID.");
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No entry was found for that ID.");
+        }
+    }
+
+    if (IsPost)
+    {
+        Validation.RequireField("canon", "You must select a canon");
+        //Validation.RequireField("book", "You must enter a book");
+        Validation.RequireField("chapter", "You must enter a chapter");
+        Validation.RequireField("verse", "You must enter a verse");
+        Validation.RequireField("entry", "You must enter a journal entry");
+
+        canon = Request.Form["canon"];
+        book = Request.Form["book"];
+        chapter = Request.Form["chapter"];
+        verse = Request.Form["verse"];
+        entry = Request.Form["entry"];
+        journalId = Request.Form["journalId"];
+
+        if (Validation.IsValid())
+        {
+            var db = Database.Open("ScriptureJournalEntries");
+            var updateCommand = "UPDATE JournalEntries SET Canon=@0, Book=@1, Chapter=@2, Verse=@3, Entry=@4 WHERE Id=@5";
+            db.Execute(updateCommand, canon, book, chapter, verse, entry, journalId);
+            Response.Redirect("~/JournalEntries");
+        }
+    }
 }
 
 <h2>Edit a Journal Entry</h2>
+@Html.ValidationSummary()
+<form method="post">
+    <fieldset>
+        <legend>Journal Entry Information</legend>
+
+        <p>
+            <label for="canon">Canon:</label>
+            <select name="canon">
+                <
+                <option selected hidden>@canon</option>
+                <option value="Old Testament">Old Testament</option>
+                <option value="New Testament">New Testament</option>
+                <option value="Book of Mormon">Book of Mormon</option>
+                <option value="Doctrine and Covenants">Doctrine and Covenants</option>
+                <option value="Pearl of Great Price">Pearl of Great Price</option>
+            </select>
+            @*<input type="text" name="canon" value="@Request.Form["canon"]" />*@
+            @Html.ValidationMessage("canon")
+        </p>
+
+        <p>
+            <label for="book">Book:</label>
+            <input type="text" name="book" value="@book" />
+            @Html.ValidationMessage("book")
+        </p>
+
+        <p>
+            @*<label for="chapter">
+            @if (!Request.Form["canon"].ToString().Equals("Doctrine and Covenants"))
+            {
+                @:Section
+            }
+            else
+            {
+                @:Chapter
+            }
+            :</ label >*@
+            <label for="chapter">Chapter:</label>
+            <input type="text" name="chapter" value="@chapter" />
+            @Html.ValidationMessage("chapter")
+        </p>
+
+        <p>
+            <label for="verse">Verse:</label>
+            <input type="text" name="verse" value="@verse" />
+            @Html.ValidationMessage("verse")
+        </p>
+
+        <p>
+            <label for="entry">Journal entry:</label>
+            <input type="text" name="entry" value="@entry" />
+            @Html.ValidationMessage("entry")
+        </p>
+
+        <input type="hidden" name="journalId" value="@journalId" />
+
+        <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
+    </fieldset>
+</form>
