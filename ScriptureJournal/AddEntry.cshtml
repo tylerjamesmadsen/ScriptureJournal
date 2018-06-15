@@ -10,18 +10,16 @@
 
     var canon = "";
     var book = "";
-    int chapter;
-    int verse;
+    var chapter = "";
+    var verse = "";
     var entry = "";
 
     if (IsPost && Validation.IsValid())
     {
         canon = Request.Form["canon"];
         book = Request.Form["book"];
-        var strChapter = Request.Form["chapter"];
-        chapter = Convert.ToUInt16(strChapter);
-        var strVerse = Request.Form["verse"];
-        verse = Convert.ToUInt16(strVerse);
+        chapter = Request.Form["chapter"];
+        verse = Request.Form["verse"];
         entry = Request.Form["entry"];
         var db = Database.Open("ScriptureJournalEntries");
         var insertCommand = "INSERT INTO JournalEntries (Canon, Book, Chapter, Verse, Entry, DateAdded)" +
@@ -50,9 +48,9 @@
         </p>
 
         <p>
-            <label for="book">Book:</label >
-                <input type="text" name="book" value="@Request.Form["book"]" />
-                @Html.ValidationMessage("book")
+            <label for="book">Book:</label>
+            <input type="text" name="book" value="@Request.Form["book"]" />
+            @Html.ValidationMessage("book")
         </p>
 
         <p>

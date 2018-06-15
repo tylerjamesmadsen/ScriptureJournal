@@ -1,6 +1,86 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "Delete Journal Entry";
+    Page.Title = "Delete a Journal Entry";
+
+    var journalId = "";
+    var canon = "";
+    var book = "";
+    var chapter = "";
+    var verse = "";
+    var entry = "";
+
+    if (!IsPost)
+    {
+        if (!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
+        {
+            journalId = Request.QueryString["ID"];
+            var db = Database.Open("ScriptureJournalEntries");
+            var dbCommand = "SELECT * FROM JournalEntries WHERE ID = @0";
+            var row = db.QuerySingle(dbCommand, journalId);
+            if (row != null)
+            {
+                canon = row.Canon;
+                book = row.Book;
+                chapter = row.Chapter;
+                verse = row.Verse;
+                entry = row.Entry;
+            }
+            else
+            {
+                Validation.AddFormError("No entry was found for that ID");
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No entry was found for that ID");
+        }
+    }
+
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+        journalId = Request.Form["journalId"];
+        var db = Database.Open("ScriptureJournalEntries");
+        var deleteCommand = "DELETE FROM JournalEntries WHERE ID = @0";
+        db.Execute(deleteCommand, journalId);
+        Response.Redirect("~/JournalEntries");
+    }
+}
 }
 
 <h2>Delete a Journal Entry</h2>
+@Html.ValidationSummary()
+<p><a href="~/JournalEntries">Return to journal</a></p>
+
+<form method="post">
+    <fieldset>
+        <legend>Journal Entry Information</legend>
+
+        <p>
+            <span>Canon:</span>
+            <span>@canon</span>
+        </p>
+
+        <p>
+            <span>Book:</span>
+            <span>@book</span>
+        </p>
+
+        <p>
+            <span>Chapter:</span>
+            <span>@chapter</span>
+        </p>
+
+        <p>
+            <span>Verse:</span>
+            <span>@verse</span>
+        </p>
+
+        <p>
+            <span>Entry:</span>
+            <span>@entry</span>
+        </p>
+
+        <input type="hidden" name="journalId" value="@journalId" />
+        <p><input type="submit" name="buttonDelete" value="Delete Journal Entry"></p>
+    </fieldset>
+</form>
