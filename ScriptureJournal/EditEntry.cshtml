@@ -40,7 +40,10 @@
     if (IsPost)
     {
         Validation.RequireField("canon", "You must select a canon");
-        //Validation.RequireField("book", "You must enter a book");
+        if (!Request.Form["canon"].Equals("Doctrine and Covenants") || Request.Form["canon"].IsEmpty())
+        {
+            Validation.RequireField("book", "You must enter a book");
+        }
         Validation.RequireField("chapter", "You must enter a chapter");
         Validation.RequireField("verse", "You must enter a verse");
         Validation.RequireField("entry", "You must enter a journal entry");
@@ -80,7 +83,6 @@
                 <option value="Doctrine and Covenants">Doctrine and Covenants</option>
                 <option value="Pearl of Great Price">Pearl of Great Price</option>
             </select>
-            @*<input type="text" name="canon" value="@Request.Form["canon"]" />*@
             @Html.ValidationMessage("canon")
         </p>
 
@@ -91,16 +93,6 @@
         </p>
 
         <p>
-            @*<label for="chapter">
-                @if (!Request.Form["canon"].ToString().Equals("Doctrine and Covenants"))
-                {
-                    @:Section
-                }
-                else
-                {
-                    @:Chapter
-                }
-                :</ label >*@
             <label for="chapter">Chapter:</label>
             <input type="text" name="chapter" value="@chapter" />
             @Html.ValidationMessage("chapter")
@@ -114,7 +106,7 @@
 
         <p>
             <label for="entry">Journal entry:</label>
-            <input type="text" name="entry" value="@entry" />
+            <textarea rows="4" cols="50" name="entry">@entry</textarea>
             @Html.ValidationMessage("entry")
         </p>
 

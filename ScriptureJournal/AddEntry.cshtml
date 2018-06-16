@@ -52,26 +52,13 @@
             @Html.ValidationMessage("canon")
         </p>
 
-        @*@if (!Request.Form["canon"].Equals("Doctrine and Covenants"))
-            {*@
         <p>
             <label for="book">Book:</label>
             <input type="text" name="book" value="@Request.Form["book"]" />
             @Html.ValidationMessage("book")
         </p>
-        @*}*@
 
         <p>
-            @*<label for="chapter">
-                @if (!Request.Form["canon"].ToString().Equals("Doctrine and Covenants"))
-                {
-                    @:Section
-                }
-                else
-                {
-                    @:Chapter
-                }
-                :</ label >*@
             <label for="chapter">Chapter:</label>
             <input type="text" name="chapter" value="@Request.Form["chapter"]" />
             @Html.ValidationMessage("chapter")
@@ -87,7 +74,6 @@
             <label for="entry">Journal entry:</label>
             @Html.ValidationMessage("entry")
             <br />
-            @*<input type="text" name="entry" value="@Request.Form["entry"]" />*@
             <textarea rows="4" cols="50" name="entry">@Request.Form["entry"]</textarea>
         </p>
 

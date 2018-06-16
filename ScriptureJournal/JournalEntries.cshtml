@@ -28,7 +28,7 @@
     }
 
     var selectedData = db.Query(selectCommand, searchTerm);
-    var grid = new WebGrid(source: selectedData, defaultSort: "Book", rowsPerPage: 5);
+    var grid = new WebGrid(source: selectedData, defaultSort: "Canon", rowsPerPage: 5);
 }
 
 <h2>Scripture Journal</h2>
@@ -37,7 +37,7 @@
         <label for="searchCanon">Canon:</label>
         <select name="searchCanon">
                 <option value="@canonSelection" selected hidden>@canonSelection</option>
-                <option value="">All</option>
+                <option value="">View All</option>
                 <option value="Old Testament">Old Testament</option>
                 <option value="New Testament">New Testament</option>
                 <option value="Book of Mormon">Book of Mormon</option>
@@ -45,7 +45,6 @@
                 <option value="Pearl of Great Price">Pearl of Great Price</option>
             </select>
         <input type="submit" value="Search Canon" /><br />
-        @*(Leave blank to list all canons.)<br />*@
     </div>
 
     <div>
