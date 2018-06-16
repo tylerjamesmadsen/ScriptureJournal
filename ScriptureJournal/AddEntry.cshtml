@@ -3,7 +3,7 @@
     Page.Title = "Add Journal Entry";
 
     Validation.RequireField("canon", "You must select a canon");
-    if (Request.Form["canon"] != "Doctrine and Covenants" || Request.Form["canon"] != "")
+    if (IsPost && (!Request.Form["canon"].Equals("Doctrine and Covenants") || Request.Form["canon"].IsEmpty()))
     {
         Validation.RequireField("book", "You must enter a book");
     }
@@ -11,7 +11,7 @@
     Validation.RequireField("verse", "You must enter a verse");
     Validation.RequireField("entry", "You must enter a journal entry");
 
-    var canon = "";
+    var canon = Request.Form["canon"];
     var book = "";
     var chapter = "";
     var verse = "";
@@ -34,28 +34,32 @@
 
 <h2>Add a Journal Entry</h2>
 @Html.ValidationSummary()
+<p><a href="~/JournalEntries">Return to journal</a></p>
+
 <form method="post">
     <fieldset>
         <legend>Scripture Journal Entry</legend>
         <p>
             <label for="canon">Canon:</label>
             <select name="canon">
-                <option value="" selected disabled hidden>@canon</option>
+                <option value="@canon" selected hidden>@canon</option>
                 <option value="Old Testament">Old Testament</option>
                 <option value="New Testament">New Testament</option>
                 <option value="Book of Mormon">Book of Mormon</option>
                 <option value="Doctrine and Covenants">Doctrine and Covenants</option>
                 <option value="Pearl of Great Price">Pearl of Great Price</option>
             </select>
-            @*<input type="text" name="canon" value="@Request.Form["canon"]" />*@
             @Html.ValidationMessage("canon")
         </p>
 
+        @*@if (!Request.Form["canon"].Equals("Doctrine and Covenants"))
+            {*@
         <p>
             <label for="book">Book:</label>
             <input type="text" name="book" value="@Request.Form["book"]" />
             @Html.ValidationMessage("book")
         </p>
+        @*}*@
 
         <p>
             @*<label for="chapter">
@@ -81,8 +85,10 @@
 
         <p>
             <label for="entry">Journal entry:</label>
-            <input type="text" name="entry" value="@Request.Form["entry"]" />
             @Html.ValidationMessage("entry")
+            <br />
+            @*<input type="text" name="entry" value="@Request.Form["entry"]" />*@
+            <textarea rows="4" cols="50" name="entry">@Request.Form["entry"]</textarea>
         </p>
 
         <p><input type="submit" name="buttonSubmit" value="Add Journal Entry" /></p>

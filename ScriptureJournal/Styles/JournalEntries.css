@@ -6,8 +6,10 @@
 
 body {
     height: 60%;
-    font-family: 'Song Myung', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
-    font-size: 10pt;
+    font-family: 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
+    font-family: 'Song Myung', serif;
+    font-family: 'Indie Flower', cursive;
+    font-size: 14pt;
     background-color: LightGray;
     line-height: 1.6em;
 }
@@ -68,10 +70,10 @@ footer {
     background-color: Yellow;
 }
 
-span.caption {
+.caption {
     width: 100px;
 }
 
-span.dataDisplay {
+.dataDisplay {
     font-weight: bold;
 }

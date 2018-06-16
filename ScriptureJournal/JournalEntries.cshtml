@@ -2,6 +2,8 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "List Scriptures";
 
+    var canonSelection = "";
+
     var db = Database.Open("ScriptureJournalEntries");
     var selectCommand = "SELECT * FROM JournalEntries";
     var searchTerm = "";
@@ -10,6 +12,7 @@
     {
         selectCommand = "SELECT * FROM JournalEntries WHERE Canon = @0";
         searchTerm = Request.QueryString["searchCanon"];
+        canonSelection = searchTerm;
     }
 
     if (!Request.QueryString["searchBook"].IsEmpty())
@@ -32,17 +35,17 @@
 <form method="get">
     <div>
         <label for="searchCanon">Canon:</label>
-        @*<select name="canon">
-                <option value="All">All</option>
+        <select name="searchCanon">
+                <option value="@canonSelection" selected hidden>@canonSelection</option>
+                <option value="">All</option>
                 <option value="Old Testament">Old Testament</option>
                 <option value="New Testament">New Testament</option>
                 <option value="Book of Mormon">Book of Mormon</option>
                 <option value="Doctrine and Covenants">Doctrine and Covenants</option>
                 <option value="Pearl of Great Price">Pearl of Great Price</option>
-            </select>*@
-        <input type="text" name="searchCanon" value="@Request.QueryString["searchCanon"]" />
+            </select>
         <input type="submit" value="Search Canon" /><br />
-        (Leave blank to list all canons.)<br />
+        @*(Leave blank to list all canons.)<br />*@
     </div>
 
     <div>
@@ -70,7 +73,7 @@
             grid.Column("Chapter"),
             grid.Column("Verse"),
             grid.Column("Entry"),
-            grid.Column("DateAdded"),
+            grid.Column("DateAdded", "Date Added"),
             grid.Column(format: @<a href="~/DeleteEntry?id=@item.ID">Delete</a>)
             )
     )
